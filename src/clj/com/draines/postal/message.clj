@@ -63,7 +63,7 @@
 
 (defn add-body! [jmsg body]
   (if (string? body)
-    (doto jmsg (.setText body))
+    (doto jmsg (.setText body "UTF-8"))
     (doto jmsg (add-multipart! body))))
 
 (defn drop-keys [m ks]
@@ -88,7 +88,7 @@
          (add-recipients! Message$RecipientType/CC (:cc msg))
          (add-recipients! Message$RecipientType/BCC (:bcc msg))
          (.setFrom (make-address (:from msg)))
-         (.setSubject (:subject msg))
+         (.setSubject (:subject msg) "UTF-8")
          (.setSentDate (or (:date msg) (make-date)))
          (add-extra! (drop-keys msg standard))
          (add-body! (:body msg))))))
