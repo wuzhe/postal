@@ -15,9 +15,11 @@
 (defn sender [msg]
   (or (:sender msg) (:from msg)))
 
-(defn make-address [addr]
+(defn make-address [addr & [personal]]
   (try
-    (InternetAddress. addr)
+    (if personal
+      (InternetAddress. addr personal "UTF-8")
+      (InternetAddress. addr))
     (catch Exception _)))
 
 (defn message->str [msg]
@@ -87,7 +89,7 @@
          (add-recipients! Message$RecipientType/TO (:to msg))
          (add-recipients! Message$RecipientType/CC (:cc msg))
          (add-recipients! Message$RecipientType/BCC (:bcc msg))
-         (.setFrom (make-address (:from msg)) "UTF-8")
+         (.setFrom (apply make-address (:from msg)))
          (.setSubject (:subject msg) "UTF-8")
          (.setSentDate (or (:date msg) (make-date)))
          (add-extra! (drop-keys msg standard))
