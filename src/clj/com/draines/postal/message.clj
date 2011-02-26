@@ -87,7 +87,7 @@
          (add-recipients! Message$RecipientType/TO (:to msg))
          (add-recipients! Message$RecipientType/CC (:cc msg))
          (add-recipients! Message$RecipientType/BCC (:bcc msg))
-         (.setFrom (make-address (:from msg)))
+         (.setFrom (make-address (:from msg)) "UTF-8")
          (.setSubject (:subject msg) "UTF-8")
          (.setSentDate (or (:date msg) (make-date)))
          (add-extra! (drop-keys msg standard))
